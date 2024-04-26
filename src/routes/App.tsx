@@ -5,6 +5,7 @@ import Login from "../pages/login";
 import Detail from "../pages/detail";
 import NewReleaseBooks from "../pages/new-release-books";
 import Profile from "../pages/profile";
+import EditProfile from "../pages/edit-profile";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/detail" element={<Detail />} />
         <Route path="/new" element={<NewReleaseBooks />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
       </Routes>
     </BrowserRouter>
   );
