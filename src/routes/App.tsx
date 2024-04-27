@@ -6,6 +6,7 @@ import Detail from "../pages/detail";
 import NewReleaseBooks from "../pages/new-release-books";
 import Profile from "../pages/profile";
 import EditProfile from "../pages/edit-profile";
+import Dashboard from "../pages/dashboard";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/new" element={<NewReleaseBooks />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/edit-profile" element={<EditProfile />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );

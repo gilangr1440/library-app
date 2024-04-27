@@ -35,6 +35,11 @@ const EditProfile = () => {
           </label>
           <br />
           <input type="text" name="phone" className="w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 mb-8" placeholder="Phone Number" />
+          <label htmlFor="photo" className="text-sm font-semibold">
+            Profile Picture
+          </label>
+          <br />
+          <input type="file" name="photo" className="w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 mb-8" />
           <div className="flex gap-5">
             <button className="bg-black hover:bg-black/70 text-white text-sm text-semibold p-3 rounded-md w-11/12">Submit</button>
             <button className="bg-red-500 hover:bg-red-500/70 text-white text-sm text-semibold p-3 rounded-md w-11/12">Delete Account</button>
