@@ -1,6 +1,7 @@
 import { RxCaretSort } from "react-icons/rx";
 import { BiSearch } from "react-icons/bi";
 import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [openSearch, setOpenSearch] = useState(false);
@@ -19,7 +20,9 @@ const Navbar = () => {
   return (
     <header className="w-full h-20 px-10 bg-white/70 fixed top-0 shadow-sm z-10">
       <nav className="flex justify-between items-center h-full">
-        <h1 className="text-xl font-semibold tracking-wider">BookQuest</h1>
+        <h1 className="text-xl font-semibold tracking-wider">
+          <Link to={"/"}>BookQuest</Link>
+        </h1>
         <div className="flex gap-8">
           <div className="relative flex flex-col">
             <div
@@ -46,8 +49,12 @@ const Navbar = () => {
             </div>
             <div className={`menu-field w-40 absolute ${openMenu ? "flex" : "hidden"} flex-col border top-12 right-0 border-gray-300 rounded-md bg-white`}>
               <ul className="menu-field text-center">
-                <li className="menu-field hover:bg-gray-300 cursor-pointer py-2">Login</li>
-                <li className="menu-field hover:bg-gray-300 cursor-pointer py-2">Register</li>
+                <li className="menu-field hover:bg-gray-300 cursor-pointer py-2">
+                  <Link to={"/login"}>Login</Link>
+                </li>
+                <li className="menu-field hover:bg-gray-300 cursor-pointer py-2">
+                  <Link to={"/register"}>Register</Link>
+                </li>
               </ul>
             </div>
           </div>
