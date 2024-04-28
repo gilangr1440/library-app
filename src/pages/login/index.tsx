@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Layout from "../../components/Layout";
 
 const Login = () => {
@@ -26,7 +27,9 @@ const Login = () => {
                 <hr className="w-full h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
                 <span className="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2 dark:text-white dark:bg-gray-900">OR</span>
               </div>
-              <button className="bg-gray-200 hover:bg-black/90 text-black text-sm text-semibold p-3 rounded-md w-11/12">Register</button>
+              <Link to={"/register"} className="bg-gray-200 hover:bg-black/90 hover:text-white text-center text-black text-sm text-semibold p-3 rounded-md w-11/12">
+                Register
+              </Link>
             </div>
           </form>
         </div>
