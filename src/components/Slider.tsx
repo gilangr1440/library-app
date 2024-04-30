@@ -5,9 +5,14 @@ import { Scrollbar } from "swiper/modules";
 import { useEffect, useState } from "react";
 import { Books } from "../utils/apis/books/types";
 import { getBooks } from "../utils/apis/books/api";
+import { useNavigate } from "react-router-dom";
 
 const Slider = () => {
   const [bookDatas, setBookDatas] = useState<Books[]>([]);
+  const navigate = useNavigate();
+  const handleDetail = (id: number | undefined) => {
+    navigate(`/detail/${id}`);
+  };
 
   useEffect(() => {
     getAllBooks();
@@ -41,7 +46,9 @@ const Slider = () => {
                     <img src={data.cover_image} className="w-full h-full object-cover" alt="cover" />
                   </div>
                   <div>
-                    <h1 className="text-md font-bold mb-2 text-start">{data.title}</h1>
+                    <h1 className="text-md hover:text-gray-400 font-bold mb-2 text-start cursor-pointer" onClick={() => handleDetail(data.id)}>
+                      {data.title}
+                    </h1>
                     <h2 className="text-sm text-gray-500 text-start">{data.author}</h2>
                   </div>
                 </SwiperSlide>

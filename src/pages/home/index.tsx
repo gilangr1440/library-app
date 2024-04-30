@@ -72,7 +72,7 @@ const Home = () => {
               {bookDatas &&
                 bookDatas.map((data: any, index: number) => (
                   <SwiperSlide style={{ justifyContent: "center", backgroundColor: "white" }}>
-                    <Cards key={index} img={data.cover_image} title={data.title} author={data.author} />
+                    <Cards key={index} id={data.id} img={data.cover_image} title={data.title} author={data.author} />
                   </SwiperSlide>
                 ))}
             </div>
@@ -93,7 +93,7 @@ const Home = () => {
               {bookDatasDefault &&
                 bookDatasDefault.map((data: any, index: number) => (
                   <SwiperSlide style={{ justifyContent: "center", backgroundColor: "white" }}>
-                    <Cards key={index} img={data.cover_image} title={data.title} author={data.author} />
+                    <Cards key={index} id={data.id} img={data.cover_image} title={data.title} author={data.author} />
                   </SwiperSlide>
                 ))}
             </div>
