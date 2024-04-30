@@ -11,7 +11,7 @@ export const getBooks = async () => {
   }
 };
 
-export const getBooksSorted = async (sort?: string, pageLimit?: number) => {
+export const getBooksSorted = async (sort?: string | null, pageLimit?: number) => {
   try {
     const response = await axiosWithConfig.get(`books?limit=${pageLimit || 8}&sort=${sort}`);
     return response.data as ResponsePayload<Books[]>;
