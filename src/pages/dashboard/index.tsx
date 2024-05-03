@@ -5,6 +5,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { getBooksSorted } from "../../utils/apis/books/api";
 import { Books } from "../../utils/apis/books/types";
+import { getBorrows } from "../../utils/apis/borrows/api";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -40,6 +41,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getAllBooks("New");
+    getAllBorrows();
   }, []);
 
   const getAllBooks = async (sort?: string | null) => {
@@ -48,6 +50,15 @@ const Dashboard = () => {
       setBookDatas(result.payload.datas);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const getAllBorrows = async () => {
+    try {
+      const result = await getBorrows();
+      console.log(result);
+    } catch (error: any) {
+      console.log(error.response.data);
     }
   };
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import { MdExpandMore } from "react-icons/md";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa6";
 import Cards from "../../components/Cards";
 import { getBooksSorted } from "../../utils/apis/books/api";
 import { Link, useLocation } from "react-router-dom";
@@ -54,10 +55,12 @@ const NewReleaseBooks = () => {
           </button>
           <div className={`sort-field bg-white ${sortOpen ? "block" : "hidden"} p-2 border border-gray-300 rounded-md text-sm`}>
             <ul className="sort-field">
-              <li className="p-1 hover:bg-gray-300 cursor-pointer rounded-md">
+              <li className="p-1 hover:bg-gray-300 flex items-center gap-2 cursor-pointer rounded-md">
+                <FaCheck className={`${sort === "New" ? "opacity-100" : "opacity-0"}`} />
                 <Link to={"/new?sort=New"}>New</Link>
               </li>
-              <li className="p-1 hover:bg-gray-300 cursor-pointer rounded-md">
+              <li className="p-1 hover:bg-gray-300 flex items-center gap-2 cursor-pointer rounded-md">
+                <FaCheck className={`${sort === "default" ? "opacity-100" : "opacity-0"}`} />
                 <Link to={"/new?sort=default"}>Default</Link>
               </li>
             </ul>
