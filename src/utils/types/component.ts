@@ -5,6 +5,7 @@ export interface LayoutProps {
 }
 
 export interface CardsProps {
+  id?: number;
   img?: string;
   title?: string;
   author?: string;

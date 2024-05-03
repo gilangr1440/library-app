@@ -2,15 +2,38 @@ import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import { MdExpandMore } from "react-icons/md";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa6";
 import Cards from "../../components/Cards";
-import bookcover from "../../assets/software-engineer-cover.jpg";
+import { getBooksSorted } from "../../utils/apis/books/api";
+import { Link, useLocation } from "react-router-dom";
+import { Books } from "../../utils/apis/books/types";
 
 const NewReleaseBooks = () => {
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const sort = urlParams.get("sort");
+  const [bookDatas, setBookDatas] = useState<Books[]>([]);
   const [sortOpen, setSortOpen] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const recordsPerPage: number = 10;
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = bookDatas.slice(firstIndex, lastIndex);
+  const npage = Math.ceil(bookDatas.length / recordsPerPage);
+  const numbers = [...Array(npage + 1).keys()].slice(1);
 
   useEffect(() => {
-    console.log(sortOpen);
-  });
+    getAllBooks(sort);
+  }, [sort]);
+
+  const getAllBooks = async (sort?: string | null) => {
+    try {
+      const result = await getBooksSorted(sort, 1000);
+      setBookDatas(result.payload.datas);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   window.addEventListener("click", (e: any) => {
     if (!e.target.className.split(" ").includes("sort-field")) {
@@ -32,38 +55,52 @@ const NewReleaseBooks = () => {
           </button>
           <div className={`sort-field bg-white ${sortOpen ? "block" : "hidden"} p-2 border border-gray-300 rounded-md text-sm`}>
             <ul className="sort-field">
-              <li className="sort-field p-1 hover:bg-gray-300 cursor-pointer rounded-md">New</li>
-              <li className="sort-field p-1 hover:bg-gray-300 cursor-pointer rounded-md">Default</li>
+              <li className="p-1 hover:bg-gray-300 flex items-center gap-2 cursor-pointer rounded-md">
+                <FaCheck className={`${sort === "New" ? "opacity-100" : "opacity-0"}`} />
+                <Link to={"/new?sort=New"}>New</Link>
+              </li>
+              <li className="p-1 hover:bg-gray-300 flex items-center gap-2 cursor-pointer rounded-md">
+                <FaCheck className={`${sort === "default" ? "opacity-100" : "opacity-0"}`} />
+                <Link to={"/new?sort=default"}>Default</Link>
+              </li>
             </ul>
           </div>
         </div>
 
-        <div className="grid grid-cols-5 justify-items-center mt-20">
-          <Cards img={bookcover} title={"Modern Software Engineering"} author={"David Farley"} />
-          <Cards img={bookcover} title={"Modern Software Engineering"} author={"David Farley"} />
-          <Cards img={bookcover} title={"Modern Software Engineering"} author={"David Farley"} />
-          <Cards img={bookcover} title={"Modern Software Engineering"} author={"David Farley"} />
-          <Cards img={bookcover} title={"Modern Software Engineering"} author={"David Farley"} />
-          <Cards img={bookcover} title={"Modern Software Engineering"} author={"David Farley"} />
-          <Cards img={bookcover} title={"Modern Software Engineering"} author={"David Farley"} />
-          <Cards img={bookcover} title={"Modern Software Engineering"} author={"David Farley"} />
-          <Cards img={bookcover} title={"Modern Software Engineering"} author={"David Farley"} />
-          <Cards img={bookcover} title={"Modern Software Engineering"} author={"David Farley"} />
-        </div>
+        <div className="grid grid-cols-5 justify-items-center mt-20">{records && records.map((data: Books, index: number) => <Cards key={index} id={data.id} img={data.cover_image} title={data.title} author={data.author} />)}</div>
 
         <div className="flex justify-center gap-3 my-10">
-          <span className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+          <span onClick={prePage} className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
             <FaChevronLeft />
           </span>
-          <span className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">1</span>
-          <span className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">2</span>
-          <span className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+          {numbers.map((n, i) => (
+            <span key={i} onClick={() => changeCPage(n)} className={`w-10 h-10 border border-gray-200 ${currentPage === n ? "bg-gray-500 text-white" : ""} rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer`}>
+              {n}
+            </span>
+          ))}
+          <span onClick={nextPage} className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
             <FaChevronRight />
           </span>
         </div>
       </div>
     </Layout>
   );
+
+  function prePage() {
+    if (currentPage !== 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }
+
+  function changeCPage(id: number) {
+    setCurrentPage(id);
+  }
+
+  function nextPage() {
+    if (currentPage !== npage) {
+      setCurrentPage(currentPage + 1);
+    }
+  }
 };
 
 export default NewReleaseBooks;

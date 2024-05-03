@@ -2,7 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 import Layout from "../../components/Layout";
 import { IoPencil, IoTrashOutline } from "react-icons/io5";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getBooksSorted } from "../../utils/apis/books/api";
+import { Books } from "../../utils/apis/books/types";
+import { getBorrows } from "../../utils/apis/borrows/api";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -10,6 +13,54 @@ const Dashboard = () => {
   const tab = urlParams.get("tab");
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showModalBorrow, setShowModalBorrow] = useState<boolean>(false);
+  const [bookDatas, setBookDatas] = useState<Books[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const recordsPerPage: number = 10;
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = bookDatas.slice(firstIndex, lastIndex);
+  const npage = Math.ceil(bookDatas.length / recordsPerPage);
+  const numbers = [...Array(npage + 1).keys()].slice(1);
+  let no: number = 1;
+
+  function prePage() {
+    if (currentPage !== 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }
+
+  function changeCPage(id: number) {
+    setCurrentPage(id);
+  }
+
+  function nextPage() {
+    if (currentPage !== npage) {
+      setCurrentPage(currentPage + 1);
+    }
+  }
+
+  useEffect(() => {
+    getAllBooks("New");
+    getAllBorrows();
+  }, []);
+
+  const getAllBooks = async (sort?: string | null) => {
+    try {
+      const result = await getBooksSorted(sort, 1000);
+      setBookDatas(result.payload.datas);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAllBorrows = async () => {
+    try {
+      const result = await getBorrows();
+      console.log(result);
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
+  };
 
   return (
     <Layout>
@@ -65,63 +116,41 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td className="px-6 py-4">1</td>
-                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      To Kill a Mockingbird
-                    </th>
-                    <td className="px-6 py-4">Harper Lee</td>
-                    <td className="px-6 py-4">Fiction</td>
-                    <td className="px-6 py-4">978-0-06-112008-4</td>
-                    <td className="px-6 py-4">true</td>
-                    <td className="px-6 py-4 flex gap-3">
-                      <IoPencil
-                        className="text-3xl text-black"
-                        onClick={() => {
-                          setShowModal((prev) => !prev);
-                        }}
-                      />
-                      <IoTrashOutline className="text-3xl text-black" />
-                    </td>
-                  </tr>
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td className="px-6 py-4">1</td>
-                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      To Kill a Mockingbird
-                    </th>
-                    <td className="px-6 py-4">Harper Lee</td>
-                    <td className="px-6 py-4">Fiction</td>
-                    <td className="px-6 py-4">978-0-06-112008-4</td>
-                    <td className="px-6 py-4">true</td>
-                    <td className="px-6 py-4 flex gap-3">
-                      <IoPencil className="text-3xl text-black" />
-                      <IoTrashOutline className="text-3xl text-black" />
-                    </td>
-                  </tr>
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td className="px-6 py-4">1</td>
-                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      To Kill a Mockingbird
-                    </th>
-                    <td className="px-6 py-4">Harper Lee</td>
-                    <td className="px-6 py-4">Fiction</td>
-                    <td className="px-6 py-4">978-0-06-112008-4</td>
-                    <td className="px-6 py-4">true</td>
-                    <td className="px-6 py-4 flex gap-3">
-                      <IoPencil className="text-3xl text-black" />
-                      <IoTrashOutline className="text-3xl text-black" />
-                    </td>
-                  </tr>
+                  {records &&
+                    records.map((data: Books, index: number) => (
+                      <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td className="px-6 py-4">{no++}</td>
+                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          {data.title}
+                        </th>
+                        <td className="px-6 py-4">{data.author}</td>
+                        <td className="px-6 py-4">{data.category}</td>
+                        <td className="px-6 py-4">{data.isbn}</td>
+                        <td className="px-6 py-4">{data.featured}</td>
+                        <td className="px-6 py-4 flex gap-3">
+                          <IoPencil
+                            className="text-3xl text-black"
+                            onClick={() => {
+                              setShowModal((prev) => !prev);
+                            }}
+                          />
+                          <IoTrashOutline className="text-3xl text-black" />
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
             <div className="flex justify-center gap-3 my-10">
-              <span className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+              <span onClick={prePage} className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
                 <FaChevronLeft />
               </span>
-              <span className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">1</span>
-              <span className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">2</span>
-              <span className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+              {numbers.map((n, i) => (
+                <span key={i} onClick={() => changeCPage(n)} className={`w-10 h-10 border border-gray-200 ${currentPage === n ? "bg-gray-500 text-white" : ""} rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer`}>
+                  {n}
+                </span>
+              ))}
+              <span onClick={nextPage} className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
                 <FaChevronRight />
               </span>
             </div>
