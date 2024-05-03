@@ -15,4 +15,10 @@ export const registerSchema = z
     path: ["retype_password"],
   });
 
+export const loginSchema = z.object({
+  email: z.string().min(1, { message: "Email is required" }).email("Not a valid email"),
+  password: z.string().min(1, { message: "Password is required" }),
+});
+
 export type RegisterType = z.infer<typeof registerSchema>;
+export type LoginType = z.infer<typeof loginSchema>;
