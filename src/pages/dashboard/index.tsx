@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getBooksSorted } from "../../utils/apis/books/api";
 import { Books } from "../../utils/apis/books/types";
 import { getBorrows } from "../../utils/apis/borrows/api";
+import { Borrows } from "../../utils/apis/borrows/types";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -14,6 +15,10 @@ const Dashboard = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showModalBorrow, setShowModalBorrow] = useState<boolean>(false);
   const [bookDatas, setBookDatas] = useState<Books[]>([]);
+  const [borrowDatas, setBorrowDatas] = useState<Borrows[]>([]);
+  let no: number = 1;
+
+  // Book pagination
   const [currentPage, setCurrentPage] = useState<number>(1);
   const recordsPerPage: number = 10;
   const lastIndex = currentPage * recordsPerPage;
@@ -21,7 +26,6 @@ const Dashboard = () => {
   const records = bookDatas.slice(firstIndex, lastIndex);
   const npage = Math.ceil(bookDatas.length / recordsPerPage);
   const numbers = [...Array(npage + 1).keys()].slice(1);
-  let no: number = 1;
 
   function prePage() {
     if (currentPage !== 1) {
@@ -36,6 +40,31 @@ const Dashboard = () => {
   function nextPage() {
     if (currentPage !== npage) {
       setCurrentPage(currentPage + 1);
+    }
+  }
+
+  // Borrow pagination
+  const [currentPageBorrow, setCurrentPageBorrow] = useState<number>(1);
+  const recordsPerPageBorrow: number = 10;
+  const lastIndexBorrow = currentPageBorrow * recordsPerPageBorrow;
+  const firstIndexBorrow = lastIndexBorrow - recordsPerPageBorrow;
+  const recordsBorrow = borrowDatas.slice(firstIndexBorrow, lastIndexBorrow);
+  const npageBorrow = Math.ceil(borrowDatas.length / recordsPerPageBorrow);
+  const numbersBorrow = [...Array(npageBorrow + 1).keys()].slice(1);
+
+  function prePageBorrow() {
+    if (currentPageBorrow !== 1) {
+      setCurrentPage(currentPageBorrow - 1);
+    }
+  }
+
+  function changeCPageBorrow(id: number) {
+    setCurrentPageBorrow(id);
+  }
+
+  function nextPageBorrow() {
+    if (currentPageBorrow !== npageBorrow) {
+      setCurrentPage(currentPageBorrow + 1);
     }
   }
 
@@ -56,7 +85,7 @@ const Dashboard = () => {
   const getAllBorrows = async () => {
     try {
       const result = await getBorrows();
-      console.log(result);
+      setBorrowDatas(result.payload.datas);
     } catch (error: any) {
       console.log(error.response.data);
     }
@@ -187,63 +216,45 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td className="px-6 py-4">1</td>
-                    <td className="px-6 py-4">Devanada</td>
-                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      To Kill a Mockingbird
-                    </th>
-                    <td className="px-6 py-4">Sun, 05 Nov 2023</td>
-                    <td className="px-6 py-4">Sun, 12 Nov 2023</td>
-                    <td className="px-6 py-4">Sun, 12 Nov 2023</td>
-                    <td className="px-6 py-4 flex gap-3">
-                      <IoPencil
-                        className="text-3xl text-black"
-                        onClick={() => {
-                          setShowModalBorrow((prev) => !prev);
-                        }}
-                      />
-                      <IoTrashOutline className="text-3xl text-black" />
-                    </td>
-                  </tr>
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td className="px-6 py-4">1</td>
-                    <td className="px-6 py-4">Devanada</td>
-                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      To Kill a Mockingbird
-                    </th>
-                    <td className="px-6 py-4">Sun, 05 Nov 2023</td>
-                    <td className="px-6 py-4">Sun, 12 Nov 2023</td>
-                    <td className="px-6 py-4">Sun, 12 Nov 2023</td>
-                    <td className="px-6 py-4 flex gap-3">
-                      <IoPencil className="text-3xl text-black" />
-                      <IoTrashOutline className="text-3xl text-black" />
-                    </td>
-                  </tr>
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td className="px-6 py-4">1</td>
-                    <td className="px-6 py-4">Devanada</td>
-                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      To Kill a Mockingbird
-                    </th>
-                    <td className="px-6 py-4">Sun, 05 Nov 2023</td>
-                    <td className="px-6 py-4">Sun, 12 Nov 2023</td>
-                    <td className="px-6 py-4">Sun, 12 Nov 2023</td>
-                    <td className="px-6 py-4 flex gap-3">
-                      <IoPencil className="text-3xl text-black" />
-                      <IoTrashOutline className="text-3xl text-black" />
-                    </td>
-                  </tr>
+                  {recordsBorrow &&
+                    recordsBorrow.map((data: Borrows, index: number) => (
+                      <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td className="px-6 py-4">{no++}</td>
+                        <td className="px-6 py-4">{data.user.full_name}</td>
+                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          {data.book.title}
+                        </th>
+                        <td className="px-6 py-4">{data.borrow_date}</td>
+                        <td className="px-6 py-4">{data.due_date}</td>
+                        <td className="px-6 py-4">{data.return_date}</td>
+                        <td className="px-6 py-4 flex gap-3">
+                          <IoPencil
+                            className="text-3xl text-black"
+                            onClick={() => {
+                              setShowModalBorrow((prev) => !prev);
+                            }}
+                          />
+                          <IoTrashOutline className="text-3xl text-black" />
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
             <div className="flex justify-center gap-3 my-10">
-              <span className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+              <span onClick={prePageBorrow} className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
                 <FaChevronLeft />
               </span>
-              <span className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">1</span>
-              <span className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">2</span>
-              <span className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+              {numbersBorrow.map((n, i) => (
+                <span
+                  key={i}
+                  onClick={() => changeCPageBorrow(n)}
+                  className={`w-10 h-10 border border-gray-200 ${currentPageBorrow === n ? "bg-gray-500 text-white" : ""} rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer`}
+                >
+                  {n}
+                </span>
+              ))}
+              <span onClick={nextPageBorrow} className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
                 <FaChevronRight />
               </span>
             </div>

@@ -24,7 +24,6 @@ const Login = () => {
     try {
       const result = await userLogin(body);
       changeToken(result?.payload.token);
-      console.log(result);
       if (result.message === "Login successfully") {
         toast.success(`${result.message}`, {
           position: "bottom-right",

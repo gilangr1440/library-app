@@ -55,14 +55,18 @@ const NewReleaseBooks = () => {
           </button>
           <div className={`sort-field bg-white ${sortOpen ? "block" : "hidden"} p-2 border border-gray-300 rounded-md text-sm`}>
             <ul className="sort-field">
-              <li className="p-1 hover:bg-gray-300 flex items-center gap-2 cursor-pointer rounded-md">
-                <FaCheck className={`${sort === "New" ? "opacity-100" : "opacity-0"}`} />
-                <Link to={"/new?sort=New"}>New</Link>
-              </li>
-              <li className="p-1 hover:bg-gray-300 flex items-center gap-2 cursor-pointer rounded-md">
-                <FaCheck className={`${sort === "default" ? "opacity-100" : "opacity-0"}`} />
-                <Link to={"/new?sort=default"}>Default</Link>
-              </li>
+              <Link to={"/new?sort=New"}>
+                <li className="p-1 hover:bg-gray-300 flex items-center gap-2 cursor-pointer rounded-md">
+                  <FaCheck className={`${sort === "New" ? "opacity-100" : "opacity-0"}`} />
+                  New
+                </li>
+              </Link>
+              <Link to={"/new?sort=default"}>
+                <li className="p-1 hover:bg-gray-300 flex items-center gap-2 cursor-pointer rounded-md">
+                  <FaCheck className={`${sort === "default" ? "opacity-100" : "opacity-0"}`} />
+                  Default
+                </li>
+              </Link>
             </ul>
           </div>
         </div>
