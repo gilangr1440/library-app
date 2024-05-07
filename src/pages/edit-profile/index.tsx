@@ -66,50 +66,74 @@ const EditProfile = () => {
             Full Name
           </label>
           <br />
-          <input type="text" className="w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 mb-8" placeholder="John Doe" {...register("full_name")} defaultValue={user?.full_name} />
-          <p className="text-sm text-red-500 ">{errors.full_name && errors.full_name.message}</p>
+          <input
+            type="text"
+            className={`w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 ${!errors.full_name && "mb-8"}`}
+            placeholder="John Doe"
+            {...register("full_name")}
+            defaultValue={user?.full_name}
+          />
+          <p className="text-sm text-red-500 mb-8">{errors.full_name && errors.full_name.message}</p>
           <label htmlFor="email" className="text-sm font-semibold">
             Email
           </label>
           <br />
-          <input type="email" className="w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 mb-8" placeholder="name@mail.com" {...register("email")} defaultValue={user?.email} />
-          <p className="text-sm text-red-500 ">{errors.email && errors.email.message}</p>
+          <input
+            type="email"
+            className={`w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 ${!errors.email && "mb-8"}`}
+            placeholder="name@mail.com"
+            {...register("email")}
+            defaultValue={user?.email}
+          />
+          <p className="text-sm text-red-500 mb-8">{errors.email && errors.email.message}</p>
           <label htmlFor="password" className="text-sm font-semibold">
             Password
           </label>
           <br />
-          <input type="password" className="w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 mb-8" placeholder="Password" {...register("password")} />
-          <p className="text-sm text-red-500 ">{errors.password && errors.password.message}</p>
+          <input type="password" className={`w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 ${!errors.password && "mb-8"}`} placeholder="Password" {...register("password")} />
+          <p className="text-sm text-red-500 mb-8">{errors.password && errors.password.message}</p>
           <label htmlFor="passwordretype" className="text-sm font-semibold">
             Password Retype
           </label>
           <br />
           <input
             type="password"
-            className="w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 mb-8"
+            className={`w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 ${!errors.retype_password && "mb-8"}`}
             placeholder="Retype Password"
             {...register("retype_password")}
             defaultValue={user?.retype_password}
           />
-          <p className="text-sm text-red-500 ">{errors.retype_password && errors.retype_password.message}</p>
+          <p className="text-sm text-red-500 mb-8">{errors.retype_password && errors.retype_password.message}</p>
           <label htmlFor="address" className="text-sm font-semibold">
             Address
           </label>
           <br />
-          <input type="text" className="w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 mb-8" placeholder="Address" {...register("address")} defaultValue={user?.address} />
-          <p className="text-sm text-red-500 ">{errors.address && errors.address.message}</p>
+          <input
+            type="text"
+            className={`w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 ${!errors.address && "mb-8"}`}
+            placeholder="Address"
+            {...register("address")}
+            defaultValue={user?.address}
+          />
+          <p className="text-sm text-red-500 mb-8">{errors.address && errors.address.message}</p>
           <label htmlFor="phone" className="text-sm font-semibold">
             Phone Number
           </label>
           <br />
-          <input type="text" className="w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 mb-8" placeholder="Phone Number" {...register("phone_number")} defaultValue={user?.phone_number} />
-          <p className="text-sm text-red-500 ">{errors.phone_number && errors.phone_number.message}</p>
+          <input
+            type="text"
+            className={`w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 ${!errors.phone_number && "mb-8"}`}
+            placeholder="Phone Number"
+            {...register("phone_number")}
+            defaultValue={user?.phone_number}
+          />
+          <p className="text-sm text-red-500 mb-8">{errors.phone_number && errors.phone_number.message}</p>
           <label htmlFor="photo" className="text-sm font-semibold">
             Profile Picture
           </label>
           <br />
-          <input type="file" className="w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 mb-8" {...register("profile_picture")} />
-          <p className="text-sm text-red-500 ">{errors.profile_picture && errors.profile_picture.message}</p>
+          <input type="file" className={`w-full text-sm p-3 rounded-md border border-gray-300 focus:outline outline-offset-2 outline-2 mt-2 ${!errors.profile_picture && "mb-8"}`} {...register("profile_picture")} />
+          <p className="text-sm text-red-500 mb-8">{errors.profile_picture && errors.profile_picture.message}</p>
           <div className="flex gap-5">
             <button className="bg-black hover:bg-black/70 text-white text-sm text-semibold p-3 rounded-md w-11/12">Submit</button>
             <button type="button" onClick={handleDeleteUser} className="bg-red-500 hover:bg-red-500/70 text-white text-sm text-semibold p-3 rounded-md w-11/12">
