@@ -1,5 +1,4 @@
 import Layout from "../../components/Layout";
-import bookcover from "../../assets/software-engineer-cover.jpg";
 import { useParams } from "react-router-dom";
 import { getBookById } from "../../utils/apis/books/api";
 import { useEffect, useState } from "react";
