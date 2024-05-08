@@ -20,6 +20,19 @@
   gap: 40px;
 }
 
+.dark .swiper-slide {
+  background: #1f2937;
+}
+
+.card-slider {
+  background: white;
+  justify-content: center;
+}
+
+.dark .card-slider {
+  background: #111827;
+}
+
 .swiper-slide img {
   display: block;
   width: 100%;
