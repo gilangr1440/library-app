@@ -202,7 +202,7 @@ const Dashboard = () => {
             <div className="flex justify-end gap-3 mx-10 my-10">
               <input type="text" className="border border-gray-300 focus:outline focus:outline-offset-2 focus:outline-2 w-80 p-2 rounded-md text-sm" placeholder="Search" />
               <button
-                className="text-sm text-white bg-black rounded-md p-2"
+                className="text-sm text-white bg-black dark:bg-gray-300 dark:text-black rounded-md p-2"
                 onClick={() => {
                   setShowModal((prev) => !prev);
                 }}
@@ -250,13 +250,13 @@ const Dashboard = () => {
                         <td className="px-6 py-4">{data.featured}</td>
                         <td className="px-6 py-4 flex gap-3">
                           <IoPencil
-                            className="text-3xl text-black cursor-pointer"
+                            className="text-3xl text-black dark:text-white cursor-pointer"
                             onClick={() => {
                               onEditBook(true, data.id);
                             }}
                           />
                           <IoTrashOutline
-                            className="text-3xl text-black cursor-pointer"
+                            className="text-3xl text-black dark:text-white cursor-pointer"
                             onClick={() => {
                               confirm("do you want to delete this book?") && handleDeleteBook(data.id);
                             }}
@@ -268,15 +268,19 @@ const Dashboard = () => {
               </table>
             </div>
             <div className="flex justify-center gap-3 my-10">
-              <span onClick={prePage} className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+              <span onClick={prePage} className="w-10 h-10 border dark:text-white border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
                 <FaChevronLeft />
               </span>
               {numbers.map((n, i) => (
-                <span key={i} onClick={() => changeCPage(n)} className={`w-10 h-10 border border-gray-200 ${currentPage === n ? "bg-gray-500 text-white" : ""} rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer`}>
+                <span
+                  key={i}
+                  onClick={() => changeCPage(n)}
+                  className={`w-10 h-10 border dark:text-white border-gray-200 ${currentPage === n ? "bg-gray-500 text-white" : ""} rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer`}
+                >
                   {n}
                 </span>
               ))}
-              <span onClick={nextPage} className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+              <span onClick={nextPage} className="w-10 h-10 border dark:text-white border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
                 <FaChevronRight />
               </span>
             </div>
@@ -326,13 +330,13 @@ const Dashboard = () => {
                         <td className="px-6 py-4">{data.return_date}</td>
                         <td className="px-6 py-4 flex gap-3">
                           <IoPencil
-                            className="text-3xl text-black cursor-pointer"
+                            className="text-3xl text-black dark:text-white cursor-pointer"
                             onClick={() => {
                               onEditBorrow(true, data.id);
                             }}
                           />
                           <IoTrashOutline
-                            className="text-3xl text-black cursor-pointer"
+                            className="text-3xl text-black dark:text-white cursor-pointer"
                             onClick={() => {
                               confirm("do you want to delete this data?") && handleDeleteBorrow(data.id);
                             }}
@@ -344,19 +348,19 @@ const Dashboard = () => {
               </table>
             </div>
             <div className="flex justify-center gap-3 my-10">
-              <span onClick={prePageBorrow} className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+              <span onClick={prePageBorrow} className="w-10 h-10 border dark:text-white border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
                 <FaChevronLeft />
               </span>
               {numbersBorrow.map((n, i) => (
                 <span
                   key={i}
                   onClick={() => changeCPageBorrow(n)}
-                  className={`w-10 h-10 border border-gray-200 ${currentPageBorrow === n ? "bg-gray-500 text-white" : ""} rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer`}
+                  className={`w-10 h-10 border dark:text-white border-gray-200 ${currentPageBorrow === n ? "bg-gray-500 text-white" : ""} rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer`}
                 >
                   {n}
                 </span>
               ))}
-              <span onClick={nextPageBorrow} className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+              <span onClick={nextPageBorrow} className="w-10 h-10 border dark:text-white border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
                 <FaChevronRight />
               </span>
             </div>
