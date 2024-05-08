@@ -43,13 +43,13 @@ const Slider = () => {
               index <= 5 && (
                 <SwiperSlide key={index}>
                   <div className="w-56 h-72 shadow-lg mb-4">
-                    <img src={data.cover_image} className="w-full h-full object-cover" alt="cover" />
+                    <img src={data.cover_image} className="w-full h-full  object-cover" alt="cover" />
                   </div>
                   <div>
-                    <h1 className="text-md hover:text-gray-400 font-bold mb-2 text-start cursor-pointer" onClick={() => handleDetail(data.id)}>
+                    <h1 className="text-md hover:text-gray-400 font-bold mb-2 text-start dark:text-white dark:hover:text-gray-600 cursor-pointer" onClick={() => handleDetail(data.id)}>
                       {data.title}
                     </h1>
-                    <h2 className="text-sm text-gray-500 text-start">{data.author}</h2>
+                    <h2 className="text-sm text-gray-500 dark:text-gray-300 text-start">{data.author}</h2>
                   </div>
                 </SwiperSlide>
               )

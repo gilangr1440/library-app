@@ -5,7 +5,7 @@ import Footer from "./Footer";
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full dark:bg-gray-900 min-h-screen">
       <Navbar />
       {children}
       <Footer />
