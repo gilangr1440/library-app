@@ -2,19 +2,24 @@ import { RxCaretSort } from "react-icons/rx";
 import { BiSearch } from "react-icons/bi";
 import { MdDarkMode, MdLightMode, MdComputer } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/contexts/auth";
 import { ToastContainer, toast } from "react-toastify";
+import { searchBook } from "../utils/apis/books/api";
+import { Books } from "../utils/apis/books/types";
 
 export const Navbar = () => {
+  const navigate = useNavigate();
   const [openSearch, setOpenSearch] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [openMode, setOpenMode] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
   const { user, token, changeToken } = useAuth();
   const [theme, setTheme] = useState(localStorage.getItem("theme") ? localStorage.getItem("theme") : "system");
   const element = document.documentElement;
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const [keywordSearch, setKeywordSearch] = useState<string>("");
+  const [searchDatas, setSearchDatas] = useState<Books[]>([]);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   function onWindowMatch() {
     if (localStorage.theme === "dark" || (!("theme" in localStorage) && darkQuery.matches)) {
@@ -42,6 +47,16 @@ export const Navbar = () => {
     }
   }, [theme]);
 
+  useEffect(() => {
+    if (keywordSearch.length !== 0) {
+      handleSearch(keywordSearch);
+    }
+    if (keywordSearch.length == 0) {
+      setKeywordSearch("");
+      setSearchDatas([]);
+    }
+  }, [keywordSearch]);
+
   darkQuery.addEventListener("change", (e) => {
     if (!("theme" in localStorage)) {
       if (e.matches) {
@@ -56,6 +71,11 @@ export const Navbar = () => {
     const target = new String(e.target.className);
     if (!target.split(" ").includes("search-field")) {
       setOpenSearch(false);
+      setKeywordSearch("");
+      setSearchDatas([]);
+      if (searchRef.current !== null) {
+        searchRef.current.value = "";
+      }
     }
     if (!target.split(" ").includes("menu-field")) {
       setOpenMenu(false);
@@ -72,6 +92,19 @@ export const Navbar = () => {
     });
   };
 
+  const handleSearch = async (keyword: string) => {
+    try {
+      const result = await searchBook(keyword);
+      setSearchDatas(result.payload.datas);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  const handleSearchPage = (keyword: string) => {
+    navigate(`/search/${keyword}`);
+  };
+
   return (
     <header className="w-full h-20 px-10 bg-white/70 dark:bg-black/70 fixed top-0 shadow-sm z-10">
       <ToastContainer autoClose={2000} />
@@ -82,7 +115,6 @@ export const Navbar = () => {
         <div className="flex gap-8">
           <div className="relative flex flex-col">
             <div
-              ref={searchRef}
               onClick={() => setOpenSearch(!openSearch)}
               className="search-field w-72 px-4 py-2 rounded-md flex justify-between items-center border border-gray-300 hover:cursor-pointer bg-white dark:bg-gray-900 hover:bg-gray-100 transition duration-200"
             >
@@ -92,11 +124,37 @@ export const Navbar = () => {
             <div className={`search-field absolute ${openSearch ? "flex" : "hidden"} flex-col border top-12 border-gray-300 rounded-md bg-white`}>
               <div className="search-field w-72 px-4 py-2 flex gap-1 items-center border-b border-b-gray-300 transition duration-200">
                 <BiSearch className="search-field text-xl text-gray-400" />
-                <input type="text" className="search-field search-input outline-none text-sm w-full" placeholder="Search Books..." />
+                <input
+                  type="text"
+                  ref={searchRef}
+                  onKeyUp={(e: any) => {
+                    setKeywordSearch(e.target.value);
+                    if (e.key === "Enter") {
+                      handleSearchPage(e.target.value);
+                      setOpenSearch(false);
+                    }
+                  }}
+                  className="search-field search-input outline-none text-sm w-full"
+                  placeholder="Search Books..."
+                />
               </div>
-              <div className="search-field h-20 flex justify-center items-center">
-                <span className="search-field text-sm text-gray-400">No book found.</span>
-              </div>
+              {searchDatas.length !== 0 ? (
+                <div className="search-field flex justify-center overflow-visible">
+                  <ul className="w-full">
+                    {searchDatas.map((data: Books, index: number) => (
+                      <Link to={`/detail/${data.id}`}>
+                        <li key={index} className="my-2 p-1 border border-gray-200 hover:bg-gray-200 cursor-pointer">
+                          {data.title}
+                        </li>
+                      </Link>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <div className="search-field h-20 flex justify-center items-center">
+                  <span className="search-field text-sm text-gray-400">No book found.</span>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex flex-col relative">
