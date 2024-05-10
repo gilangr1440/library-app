@@ -3,7 +3,7 @@ import Layout from "../../components/Layout";
 import { IoPencil, IoTrashOutline } from "react-icons/io5";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { addBook, deleteBook, editBook, getBookById, getBooksSorted } from "../../utils/apis/books/api";
+import { addBook, deleteBook, editBook, getBookById, getBooksSorted, searchBook } from "../../utils/apis/books/api";
 import { Book, Books, BooksType } from "../../utils/apis/books/types";
 import { deleteBorrow, editBorrow, getBorrows } from "../../utils/apis/borrows/api";
 import { BorrowType, Borrows } from "../../utils/apis/borrows/types";
@@ -25,6 +25,8 @@ const Dashboard = () => {
   const [bookDatas, setBookDatas] = useState<Books[]>([]);
   const [detailBook, setDetailBook] = useState<Book>();
   const [borrowDatas, setBorrowDatas] = useState<Borrows[]>([]);
+  const [keywordSearch, setKeywordSearch] = useState<string>("");
+  const [searchDatas, setSearchDatas] = useState<Books[]>([]);
   let no: number = 1;
 
   // Book pagination
@@ -80,7 +82,14 @@ const Dashboard = () => {
   useEffect(() => {
     getAllBooks("New");
     getAllBorrows();
-  }, []);
+    if (keywordSearch.length !== 0) {
+      handleSearch(keywordSearch);
+    }
+    if (keywordSearch.length == 0) {
+      setKeywordSearch("");
+      setSearchDatas([]);
+    }
+  }, [keywordSearch]);
 
   const getAllBooks = async (sort?: string | null) => {
     try {
@@ -177,6 +186,15 @@ const Dashboard = () => {
     }
   };
 
+  const handleSearch = async (keyword: string) => {
+    try {
+      const result = await searchBook(keyword);
+      setSearchDatas(result.payload.datas);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
   return (
     <Layout>
       <ToastContainer autoClose={false} containerId={"editbook"} />
@@ -200,7 +218,14 @@ const Dashboard = () => {
         {tab == "books" ? (
           <>
             <div className="flex justify-end gap-3 mx-10 my-10">
-              <input type="text" className="border border-gray-300 focus:outline focus:outline-offset-2 focus:outline-2 w-80 p-2 rounded-md text-sm" placeholder="Search" />
+              <input
+                type="text"
+                onKeyUp={(e: any) => {
+                  setKeywordSearch(e.target.value);
+                }}
+                className="border border-gray-300 focus:outline focus:outline-offset-2 focus:outline-2 w-80 p-2 rounded-md text-sm"
+                placeholder="Search"
+              />
               <button
                 className="text-sm text-white bg-black dark:bg-gray-300 dark:text-black rounded-md p-2"
                 onClick={() => {
@@ -237,53 +262,82 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {records &&
-                    records.map((data: Books, index: number) => (
-                      <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <td className="px-6 py-4">{no++}</td>
-                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          {data.title}
-                        </th>
-                        <td className="px-6 py-4">{data.author}</td>
-                        <td className="px-6 py-4">{data.category}</td>
-                        <td className="px-6 py-4">{data.isbn}</td>
-                        <td className="px-6 py-4">{data.featured}</td>
-                        <td className="px-6 py-4 flex gap-3">
-                          <IoPencil
-                            className="text-3xl text-black dark:text-white cursor-pointer"
-                            onClick={() => {
-                              onEditBook(true, data.id);
-                            }}
-                          />
-                          <IoTrashOutline
-                            className="text-3xl text-black dark:text-white cursor-pointer"
-                            onClick={() => {
-                              confirm("do you want to delete this book?") && handleDeleteBook(data.id);
-                            }}
-                          />
-                        </td>
-                      </tr>
-                    ))}
+                  {searchDatas.length != 0
+                    ? searchDatas.map((data: Books, index: number) => (
+                        <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <td className="px-6 py-4">{no++}</td>
+                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {data.title}
+                          </th>
+                          <td className="px-6 py-4">{data.author}</td>
+                          <td className="px-6 py-4">{data.category}</td>
+                          <td className="px-6 py-4">{data.isbn}</td>
+                          <td className="px-6 py-4">{data.featured}</td>
+                          <td className="px-6 py-4 flex gap-3">
+                            <IoPencil
+                              className="text-3xl text-black dark:text-white cursor-pointer"
+                              onClick={() => {
+                                onEditBook(true, data.id);
+                              }}
+                            />
+                            <IoTrashOutline
+                              className="text-3xl text-black dark:text-white cursor-pointer"
+                              onClick={() => {
+                                confirm("do you want to delete this book?") && handleDeleteBook(data.id);
+                              }}
+                            />
+                          </td>
+                        </tr>
+                      ))
+                    : records &&
+                      records.map((data: Books, index: number) => (
+                        <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <td className="px-6 py-4">{no++}</td>
+                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {data.title}
+                          </th>
+                          <td className="px-6 py-4">{data.author}</td>
+                          <td className="px-6 py-4">{data.category}</td>
+                          <td className="px-6 py-4">{data.isbn}</td>
+                          <td className="px-6 py-4">{data.featured}</td>
+                          <td className="px-6 py-4 flex gap-3">
+                            <IoPencil
+                              className="text-3xl text-black dark:text-white cursor-pointer"
+                              onClick={() => {
+                                onEditBook(true, data.id);
+                              }}
+                            />
+                            <IoTrashOutline
+                              className="text-3xl text-black dark:text-white cursor-pointer"
+                              onClick={() => {
+                                confirm("do you want to delete this book?") && handleDeleteBook(data.id);
+                              }}
+                            />
+                          </td>
+                        </tr>
+                      ))}
                 </tbody>
               </table>
             </div>
-            <div className="flex justify-center gap-3 my-10">
-              <span onClick={prePage} className="w-10 h-10 border dark:text-white border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
-                <FaChevronLeft />
-              </span>
-              {numbers.map((n, i) => (
-                <span
-                  key={i}
-                  onClick={() => changeCPage(n)}
-                  className={`w-10 h-10 border dark:text-white border-gray-200 ${currentPage === n ? "bg-gray-500 text-white" : ""} rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer`}
-                >
-                  {n}
+            {searchDatas.length == 0 && (
+              <div className="flex justify-center gap-3 my-10">
+                <span onClick={prePage} className="w-10 h-10 border dark:text-white border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+                  <FaChevronLeft />
                 </span>
-              ))}
-              <span onClick={nextPage} className="w-10 h-10 border dark:text-white border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
-                <FaChevronRight />
-              </span>
-            </div>
+                {numbers.map((n, i) => (
+                  <span
+                    key={i}
+                    onClick={() => changeCPage(n)}
+                    className={`w-10 h-10 border dark:text-white border-gray-200 ${currentPage === n ? "bg-gray-500 text-white" : ""} rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer`}
+                  >
+                    {n}
+                  </span>
+                ))}
+                <span onClick={nextPage} className="w-10 h-10 border dark:text-white border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+                  <FaChevronRight />
+                </span>
+              </div>
+            )}
           </>
         ) : (
           <>
