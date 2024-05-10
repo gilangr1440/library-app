@@ -28,11 +28,11 @@ const Detail = () => {
           <img src={bookData.cover_image} className="w-full h-full object-cover" alt="cover-book" />
         </div>
         <div className="w-[830px]">
-          <h1 className="text-2xl font-bold mb-3">{bookData.title}</h1>
+          <h1 className="text-2xl dark:text-white font-bold mb-3">{bookData.title}</h1>
           <h3 className="text-sm text-gray-500 mb-3">by {bookData.author}</h3>
           <span className="bg-black text-white text-xs rounded-full p-1 mb-3">{bookData.category}</span>
           <hr className="my-8" />
-          <p className="text-justify">{bookData.description}</p>
+          <p className="text-justify dark:text-white">{bookData.description}</p>
         </div>
       </div>
     </Layout>

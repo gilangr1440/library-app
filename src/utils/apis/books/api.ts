@@ -79,3 +79,12 @@ export const deleteBook = async (id: number) => {
     return error.response;
   }
 };
+
+export const searchBook = async (keyword: string) => {
+  try {
+    const response = await axiosWithConfig.get(`books?query=${keyword}&limit=100`);
+    return response.data as ResponsePayload<Books[]>;
+  } catch (error: any) {
+    return error.response;
+  }
+};

@@ -1,3 +1,4 @@
+import axios from "axios";
 import axiosWithConfig from "../axiosWithConfig";
 import { LoginType, RegisterType } from "./types";
 
@@ -18,7 +19,8 @@ export const userRegister = async (body: RegisterType) => {
 
 export const userLogin = async (body: LoginType) => {
   try {
-    const response = await axiosWithConfig.post("login", body);
+    // const response = await axiosWithConfig.post("login", body);
+    const response = await axios.post("https://hells-kitchen.onrender.com/api/v1/login", body);
     return response.data as { message: string; payload: LoginPayload };
   } catch (error: any) {
     return error.response.data;

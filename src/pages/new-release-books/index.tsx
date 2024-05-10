@@ -74,15 +74,19 @@ const NewReleaseBooks = () => {
         <div className="grid grid-cols-5 justify-items-center mt-20">{records && records.map((data: Books, index: number) => <Cards key={index} id={data.id} img={data.cover_image} title={data.title} author={data.author} />)}</div>
 
         <div className="flex justify-center gap-3 my-10">
-          <span onClick={prePage} className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+          <span onClick={prePage} className="w-10 h-10 border dark:text-white border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
             <FaChevronLeft />
           </span>
           {numbers.map((n, i) => (
-            <span key={i} onClick={() => changeCPage(n)} className={`w-10 h-10 border border-gray-200 ${currentPage === n ? "bg-gray-500 text-white" : ""} rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer`}>
+            <span
+              key={i}
+              onClick={() => changeCPage(n)}
+              className={`w-10 h-10 border dark:text-white border-gray-200 ${currentPage === n ? "bg-gray-500 text-white" : ""} rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer`}
+            >
               {n}
             </span>
           ))}
-          <span onClick={nextPage} className="w-10 h-10 border border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
+          <span onClick={nextPage} className="w-10 h-10 border dark:text-white border-gray-200 rounded-md flex justify-center items-center hover:bg-gray-200 cursor-pointer">
             <FaChevronRight />
           </span>
         </div>
