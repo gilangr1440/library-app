@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import Layout from "../../components/Layout";
 import { IoPencil, IoTrashOutline } from "react-icons/io5";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { addBook, deleteBook, editBook, getBookById, getBooksSorted, searchBook } from "../../utils/apis/books/api";
 import { Book, Books, BooksType } from "../../utils/apis/books/types";
 import { deleteBorrow, editBorrow, getBorrows } from "../../utils/apis/borrows/api";
@@ -27,6 +27,7 @@ const Dashboard = () => {
   const [borrowDatas, setBorrowDatas] = useState<Borrows[]>([]);
   const [keywordSearch, setKeywordSearch] = useState<string>("");
   const [searchDatas, setSearchDatas] = useState<Books[]>([]);
+  const searchRef = useRef<HTMLInputElement>(null);
   let no: number = 1;
 
   // Book pagination
@@ -90,6 +91,17 @@ const Dashboard = () => {
       setSearchDatas([]);
     }
   }, [keywordSearch]);
+
+  window.addEventListener("click", (e: any) => {
+    const target = new String(e.target.className);
+    if (!target.split(" ").includes("search-book")) {
+      setKeywordSearch("");
+      setSearchDatas([]);
+      if (searchRef.current !== null) {
+        searchRef.current.value = "";
+      }
+    }
+  });
 
   const getAllBooks = async (sort?: string | null) => {
     try {
@@ -220,10 +232,11 @@ const Dashboard = () => {
             <div className="flex justify-end gap-3 mx-10 my-10">
               <input
                 type="text"
+                ref={searchRef}
                 onKeyUp={(e: any) => {
                   setKeywordSearch(e.target.value);
                 }}
-                className="border border-gray-300 focus:outline focus:outline-offset-2 focus:outline-2 w-80 p-2 rounded-md text-sm"
+                className="search-book border border-gray-300 focus:outline focus:outline-offset-2 focus:outline-2 w-80 p-2 rounded-md text-sm"
                 placeholder="Search"
               />
               <button
