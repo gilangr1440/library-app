@@ -7,8 +7,8 @@ import { userLogin } from "../../utils/apis/auth/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../utils/contexts/auth";
-import axiosWithConfig from "../../utils/apis/axiosWithConfig";
-import axios from "axios";
+// import axiosWithConfig from "../../utils/apis/axiosWithConfig";
+// import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
