@@ -29,6 +29,7 @@ const Dashboard = () => {
   const [searchDatas, setSearchDatas] = useState<Books[]>([]);
   const searchRef = useRef<HTMLInputElement>(null);
   let no: number = 1;
+  console.log(borrowDatas);
 
   // Book pagination
   const [currentPage, setCurrentPage] = useState<number>(1);

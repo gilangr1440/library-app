@@ -1,12 +1,14 @@
 import { RxCaretSort } from "react-icons/rx";
 import { BiSearch } from "react-icons/bi";
-import { MdDarkMode, MdLightMode, MdComputer } from "react-icons/md";
+import { MdDarkMode, MdLightMode, MdComputer, MdShoppingCart } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/contexts/auth";
 import { ToastContainer, toast } from "react-toastify";
 import { searchBook } from "../utils/apis/books/api";
 import { Books } from "../utils/apis/books/types";
+import { useCartStore } from "../utils/stores/cart-store";
+import { useShallow } from "zustand/react/shallow";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ export const Navbar = () => {
   const [keywordSearch, setKeywordSearch] = useState<string>("");
   const [searchDatas, setSearchDatas] = useState<Books[]>([]);
   const searchRef = useRef<HTMLInputElement>(null);
+  const [borrow] = useCartStore(useShallow((state) => [state.borrow]));
 
   function onWindowMatch() {
     if (localStorage.theme === "dark" || (!("theme" in localStorage) && darkQuery.matches)) {
@@ -159,7 +162,6 @@ export const Navbar = () => {
           </div>
           <div className="flex flex-col relative">
             <div onClick={() => setOpenMode(!openMode)} className="mode-field w-10 h-10 relative rounded-full bg-gray-100 hover:bg-gray-400 dark:bg-gray-900 dark:hover:bg-gray-600 font-bold hover:cursor-pointer">
-              {/* <span className="mode-field absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">BQ</span> */}
               {theme == "light" ? (
                 <MdLightMode className="mode-field absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               ) : theme == "dark" ? (
@@ -182,6 +184,18 @@ export const Navbar = () => {
               </ul>
             </div>
           </div>
+          {token && (
+            <div className="flex flex-col relative">
+              <Link to={"/cart"}>
+                <div className="mode-field w-10 h-10 relative rounded-full bg-gray-100 hover:bg-gray-400 dark:bg-gray-900 dark:hover:bg-gray-600 font-bold hover:cursor-pointer">
+                  {borrow && <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{borrow.length}</div>}
+                  <span className="mode-field absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <MdShoppingCart />
+                  </span>
+                </div>
+              </Link>
+            </div>
+          )}
           <div className="relative flex flex-col">
             {token ? (
               <>

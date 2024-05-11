@@ -4,6 +4,7 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const userSchema = z
   .object({
+    id: z.number().optional(),
     email: z.string().email("Enter a valid email").min(1, { message: "Enter email" }),
     full_name: z.string().min(1, { message: "Enter your name" }),
     password: z.string().min(6, { message: "Password must be at least 6 characters" }).optional().or(z.literal("")),

@@ -9,6 +9,7 @@ import EditProfile from "../pages/edit-profile";
 import Dashboard from "../pages/dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import Search from "../pages/search";
+import Cart from "../pages/cart";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/search/:keyword" element={<Search />} />
+          <Route path="/cart" element={<Cart />} />
         </Route>
         <Route path="*" element={<p className="text-center text-3xl font-medium py-20">There's nothing here: 404!</p>} />
       </Routes>
