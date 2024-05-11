@@ -1,6 +1,6 @@
 import { ResponsePayload } from "../../types/api";
 import axiosWithConfig from "../axiosWithConfig";
-import { BorrowType, Borrows } from "./types";
+import { BorrowAddType, BorrowType, Borrows } from "./types";
 
 export const getBorrows = async () => {
   try {

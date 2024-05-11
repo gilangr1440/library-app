@@ -1,14 +1,14 @@
 import { z } from "zod";
 
 type book = {
-  cover_image: string;
-  id: number;
-  title: string;
+  cover_image: string | undefined;
+  id: number | undefined;
+  title: string | undefined;
 };
 
 type user = {
-  full_name: string;
-  id: number;
+  full_name: string | undefined;
+  id: number | undefined;
 };
 
 export interface Borrows {
@@ -18,6 +18,17 @@ export interface Borrows {
   id: number;
   return_date: string;
   user: user;
+}
+
+export interface BorrowCartType {
+  cover_image: string | undefined;
+  id: number | undefined;
+  title: string | undefined;
+}
+
+export interface BorrowAddType {
+  bookId: number[];
+  borrow_date: string;
 }
 
 export const borrowSchema = z.object({
