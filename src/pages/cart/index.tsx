@@ -3,7 +3,6 @@ import Layout from "../../components/Layout";
 import { useCartStore } from "../../utils/stores/cart-store";
 import { BorrowCartType } from "../../utils/apis/borrows/types";
 import { IoTrashOutline } from "react-icons/io5";
-import { addBorrow } from "../../utils/apis/borrows/api";
 
 const Cart = () => {
   const [borrow, deleteBorrow] = useCartStore(useShallow((state) => [state.borrow, state.deleteBorrow]));
