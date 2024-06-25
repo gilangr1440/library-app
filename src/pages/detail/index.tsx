@@ -8,8 +8,10 @@ import { useCartStore } from "../../utils/stores/cart-store";
 import { useShallow } from "zustand/react/shallow";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../../utils/contexts/auth";
 
 const Detail = () => {
+  const { token } = useAuth();
   const { id } = useParams();
   const [bookData, setBookData] = useState<Partial<Book>>({});
   const [borrow, addBorrow] = useCartStore(useShallow((state) => [state.borrow, state.addBorrow]));
@@ -67,9 +69,11 @@ const Detail = () => {
           <span className="bg-black text-white text-xs rounded-full p-1 mb-3">{bookData.category}</span>
           <hr className="my-8" />
           <p className="text-justify dark:text-white mb-3">{bookData.description}</p>
-          <button onClick={addToCartHandle} className="flex justify-center items-center gap-2 p-2 bg-black hover:bg-gray-700 text-white rounded-md text-sm">
-            Add to cart <FaPlus />
-          </button>
+          {token && (
+            <button onClick={addToCartHandle} className="flex justify-center items-center gap-2 p-2 bg-black hover:bg-gray-700 text-white rounded-md text-sm">
+              Add to cart <FaPlus />
+            </button>
+          )}
         </div>
       </div>
     </Layout>
