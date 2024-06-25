@@ -200,11 +200,11 @@ export const Navbar = () => {
             {token ? (
               <>
                 <div onClick={() => setOpenMenu(!openMenu)} className="menu-field w-10 h-10 relative rounded-full bg-gray-100 font-bold hover:cursor-pointer">
-                  <img onClick={() => setOpenMenu(!openMenu)} src={user.profile_picture} className="menu-field object-cover w-full h-full rounded-full" />
+                  <img onClick={() => setOpenMenu(!openMenu)} src={user?.profile_picture} className="menu-field object-cover w-full h-full rounded-full" />
                 </div>
                 <div className={`menu-field w-40 absolute ${openMenu ? "flex" : "hidden"} flex-col border top-12 right-0 border-gray-300 rounded-md bg-white`}>
                   <ul className="menu-field text-start">
-                    <li className="menu-field font-semibold border-b border-b-gray-300 p-2">Hi! {user.full_name}</li>
+                    <li className="menu-field font-semibold border-b border-b-gray-300 p-2">Hi! {user?.full_name}</li>
                     <Link to={"/profile"}>
                       <li className="menu-field hover:bg-gray-300 cursor-pointer p-2">Profile</li>
                     </Link>
